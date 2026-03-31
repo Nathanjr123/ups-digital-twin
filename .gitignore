@@ -27,7 +27,7 @@ env/
 # ML Models
 *.joblib
 *.pkl
-models/
+/models/
 
 # IDEs
 .vscode/
