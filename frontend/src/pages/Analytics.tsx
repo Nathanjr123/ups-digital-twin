@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Card } from '@/components/common/Card';
 import { predictionService } from '@/services/api';
 import type { ModelPerformance } from '@/types/prediction';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Brain, TrendingUp } from 'lucide-react';
 
 export function Analytics() {

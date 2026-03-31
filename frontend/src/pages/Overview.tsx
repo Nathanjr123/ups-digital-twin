@@ -11,7 +11,7 @@ import { StatusBadge } from '@/components/common/StatusBadge';
 import { DiagnosticPanel } from '@/components/diagnostics/DiagnosticPanel';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { upsService, alertService } from '@/services/api';
-import type { FleetSummary, UPSTelemetry } from '@/types/ups';
+import type { FleetSummary } from '@/types/ups';
 import type { Alert } from '@/types/alert';
 import { formatTimeAgo, formatAlertType } from '@/utils/formatters';
 import { AlertCircle, ChevronDown, ChevronUp, Wifi, WifiOff } from 'lucide-react';

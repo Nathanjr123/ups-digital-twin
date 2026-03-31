@@ -8,17 +8,11 @@ import type { UPSTelemetry } from '@/types/ups';
 
 const WS_BASE_URL = import.meta.env.VITE_WS_URL || `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}`;
 
-interface TelemetryUpdate {
-  type: 'telemetry_update';
-  timestamp: string;
-  data: UPSTelemetry[];
-}
-
 export function useWebSocket() {
   const [telemetryData, setTelemetryData] = useState<UPSTelemetry[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   const connect = useCallback(() => {
     try {

@@ -4,21 +4,17 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Card } from '@/components/common/Card';
 import { StatusBadge } from '@/components/common/StatusBadge';
-import { Gauge } from '@/components/common/Gauge';
 import { DiagnosticPanel } from '@/components/diagnostics/DiagnosticPanel';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { predictionService } from '@/services/api';
-import type { UPSTelemetry } from '@/types/ups';
 import type { CombinedPrediction } from '@/types/prediction';
 import { Battery, Zap, Thermometer, ChevronDown, ChevronUp, ArrowUpDown } from 'lucide-react';
 
 type SortBy = 'name' | 'health' | 'risk';
 
 export function Fleet() {
-  const { telemetryData, isConnected } = useWebSocket();
+  const { telemetryData } = useWebSocket();
   const [filter, setFilter] = useState<'all' | 'healthy' | 'warning' | 'critical'>('all');
   const [expandedUps, setExpandedUps] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<SortBy>('name');
