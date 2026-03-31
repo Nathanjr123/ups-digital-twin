@@ -57,12 +57,12 @@ export function ContributingFactorsList({ factors, maxItems, compact }: Props) {
 
           {(factor.deviation_pct !== undefined || factor.importance !== undefined) && (
             <div className="flex items-center gap-3 mt-1.5">
-              {factor.deviation_pct !== undefined && (
+              {factor.deviation_pct != null && isFinite(factor.deviation_pct) && (
                 <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${getDeviationColor(factor.deviation_pct)}`}>
                   {factor.deviation_pct.toFixed(1)}% deviation
                 </span>
               )}
-              {factor.importance !== undefined && (
+              {factor.importance != null && isFinite(factor.importance) && (
                 <div className="flex items-center gap-1.5 flex-1">
                   <span className="text-xs text-gray-500">Impact:</span>
                   <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden max-w-[80px]">

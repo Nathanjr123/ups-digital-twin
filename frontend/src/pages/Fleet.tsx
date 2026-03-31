@@ -11,6 +11,11 @@ import { predictionService } from '@/services/api';
 import type { CombinedPrediction } from '@/types/prediction';
 import { Battery, Zap, Thermometer, ChevronDown, ChevronUp, ArrowUpDown } from 'lucide-react';
 
+function safeNum(val: any, fallback = 0): number {
+  const n = Number(val);
+  return isNaN(n) || !isFinite(n) ? fallback : n;
+}
+
 type SortBy = 'name' | 'health' | 'risk';
 
 export function Fleet() {
@@ -128,7 +133,7 @@ export function Fleet() {
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900">{ups.ups_id}</h3>
-                        <p className="text-sm text-gray-500">Health: {ups.health_score.toFixed(0)}%</p>
+                        <p className="text-sm text-gray-500">Health: {safeNum(ups.health_score).toFixed(0)}%</p>
                       </div>
                       <div className="flex items-center gap-2">
                         {pred && (
@@ -137,7 +142,7 @@ export function Fleet() {
                             pred.overall_risk_score < 60 ? 'bg-yellow-100 text-yellow-700' :
                             'bg-red-100 text-red-700'
                           }`}>
-                            Risk: {pred.overall_risk_score.toFixed(0)}%
+                            Risk: {safeNum(pred.overall_risk_score).toFixed(0)}%
                           </span>
                         )}
                         <StatusBadge status={ups.status} type="health" />
@@ -148,26 +153,26 @@ export function Fleet() {
                     <div className="grid grid-cols-3 gap-4">
                       <div className="text-center">
                         <Battery className="w-4 h-4 text-gray-500 mx-auto mb-1" />
-                        <p className="text-2xl font-bold text-gray-900">{ups.battery_soc.toFixed(0)}%</p>
+                        <p className="text-2xl font-bold text-gray-900">{safeNum(ups.battery_soc).toFixed(0)}%</p>
                         <p className="text-xs text-gray-500">Battery</p>
                       </div>
                       <div className="text-center">
                         <Zap className="w-4 h-4 text-gray-500 mx-auto mb-1" />
-                        <p className="text-2xl font-bold text-gray-900">{ups.load_percentage.toFixed(0)}%</p>
+                        <p className="text-2xl font-bold text-gray-900">{safeNum(ups.load_percentage).toFixed(0)}%</p>
                         <p className="text-xs text-gray-500">Load</p>
                       </div>
                       <div className="text-center">
                         <Thermometer className="w-4 h-4 text-gray-500 mx-auto mb-1" />
-                        <p className="text-2xl font-bold text-gray-900">{ups.battery_temperature.toFixed(0)}°C</p>
+                        <p className="text-2xl font-bold text-gray-900">{safeNum(ups.battery_temperature).toFixed(0)}°C</p>
                         <p className="text-xs text-gray-500">Temp</p>
                       </div>
                     </div>
 
                     {/* Footer */}
                     <div className="pt-4 border-t border-gray-200 flex justify-between items-center text-sm">
-                      <span className="text-gray-500">{ups.output_voltage.toFixed(0)}V Output</span>
+                      <span className="text-gray-500">{safeNum(ups.output_voltage).toFixed(0)}V Output</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-500">{ups.runtime_remaining} min runtime</span>
+                        <span className="text-gray-500">{safeNum(ups.runtime_remaining)} min runtime</span>
                         {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
                       </div>
                     </div>

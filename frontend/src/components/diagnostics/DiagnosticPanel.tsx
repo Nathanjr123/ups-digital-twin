@@ -7,6 +7,11 @@ import type { CombinedPrediction } from '@/types/prediction';
 import type { UPSTelemetry } from '@/types/ups';
 import { AlertTriangle, TrendingUp, ExternalLink, Loader2 } from 'lucide-react';
 
+function safeNum(val: any, fallback = 0): number {
+  const n = Number(val);
+  return isNaN(n) || !isFinite(n) ? fallback : n;
+}
+
 interface Props {
   upsId: string;
   telemetry: UPSTelemetry;
@@ -30,20 +35,20 @@ export function DiagnosticPanel({ upsId, telemetry }: Props) {
     <div className="bg-gray-50 border-t border-gray-200 px-4 py-4 space-y-4">
       {/* Quick Telemetry */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <MiniMetric label="Input Voltage" value={`${telemetry.input_voltage.toFixed(1)} V`} />
-        <MiniMetric label="Output Voltage" value={`${telemetry.output_voltage.toFixed(1)} V`} />
-        <MiniMetric label="Battery Temp" value={`${telemetry.battery_temperature.toFixed(1)} °C`}
-          warn={telemetry.battery_temperature > 35} critical={telemetry.battery_temperature > 45} />
-        <MiniMetric label="Inverter Temp" value={`${telemetry.inverter_temperature.toFixed(1)} °C`}
-          warn={telemetry.inverter_temperature > 55} critical={telemetry.inverter_temperature > 65} />
-        <MiniMetric label="Battery SOC" value={`${telemetry.battery_soc.toFixed(1)}%`}
-          warn={telemetry.battery_soc < 80} critical={telemetry.battery_soc < 60} />
-        <MiniMetric label="Load" value={`${telemetry.load_percentage.toFixed(1)}%`}
-          warn={telemetry.load_percentage > 85} critical={telemetry.load_percentage > 95} />
-        <MiniMetric label="Runtime" value={`${telemetry.runtime_remaining} min`}
-          warn={telemetry.runtime_remaining < 30} critical={telemetry.runtime_remaining < 10} />
-        <MiniMetric label="Health" value={`${telemetry.health_score.toFixed(1)}%`}
-          warn={telemetry.health_score < 70} critical={telemetry.health_score < 50} />
+        <MiniMetric label="Input Voltage" value={`${safeNum(telemetry.input_voltage).toFixed(1)} V`} />
+        <MiniMetric label="Output Voltage" value={`${safeNum(telemetry.output_voltage).toFixed(1)} V`} />
+        <MiniMetric label="Battery Temp" value={`${safeNum(telemetry.battery_temperature).toFixed(1)} °C`}
+          warn={safeNum(telemetry.battery_temperature) > 35} critical={safeNum(telemetry.battery_temperature) > 45} />
+        <MiniMetric label="Inverter Temp" value={`${safeNum(telemetry.inverter_temperature).toFixed(1)} °C`}
+          warn={safeNum(telemetry.inverter_temperature) > 55} critical={safeNum(telemetry.inverter_temperature) > 65} />
+        <MiniMetric label="Battery SOC" value={`${safeNum(telemetry.battery_soc).toFixed(1)}%`}
+          warn={safeNum(telemetry.battery_soc) < 80} critical={safeNum(telemetry.battery_soc) < 60} />
+        <MiniMetric label="Load" value={`${safeNum(telemetry.load_percentage).toFixed(1)}%`}
+          warn={safeNum(telemetry.load_percentage) > 85} critical={safeNum(telemetry.load_percentage) > 95} />
+        <MiniMetric label="Runtime" value={`${safeNum(telemetry.runtime_remaining)} min`}
+          warn={safeNum(telemetry.runtime_remaining) < 30} critical={safeNum(telemetry.runtime_remaining) < 10} />
+        <MiniMetric label="Health" value={`${safeNum(telemetry.health_score).toFixed(1)}%`}
+          warn={safeNum(telemetry.health_score) < 70} critical={safeNum(telemetry.health_score) < 50} />
       </div>
 
       {loading ? (
@@ -65,15 +70,15 @@ export function DiagnosticPanel({ upsId, telemetry }: Props) {
             <div className="grid grid-cols-3 gap-2 text-xs mb-3">
               <div>
                 <span className="text-gray-500">Probability</span>
-                <p className="font-bold text-gray-900">{(prediction.failure.failure_probability * 100).toFixed(1)}%</p>
+                <p className="font-bold text-gray-900">{(safeNum(prediction.failure.failure_probability) * 100).toFixed(1)}%</p>
               </div>
               <div>
                 <span className="text-gray-500">Time to Failure</span>
-                <p className="font-bold text-gray-900">{prediction.failure.time_to_failure_days}d</p>
+                <p className="font-bold text-gray-900">{safeNum(prediction.failure.time_to_failure_days)}d</p>
               </div>
               <div>
                 <span className="text-gray-500">Risk Score</span>
-                <p className="font-bold text-gray-900">{prediction.overall_risk_score.toFixed(0)}%</p>
+                <p className="font-bold text-gray-900">{safeNum(prediction.overall_risk_score).toFixed(0)}%</p>
               </div>
             </div>
             {prediction.failure.risk_factors.length > 0 && (
@@ -100,11 +105,11 @@ export function DiagnosticPanel({ upsId, telemetry }: Props) {
             <div className="grid grid-cols-2 gap-2 text-xs mb-3">
               <div>
                 <span className="text-gray-500">Anomaly Score</span>
-                <p className="font-bold text-gray-900">{prediction.anomaly.anomaly_score.toFixed(3)}</p>
+                <p className="font-bold text-gray-900">{safeNum(prediction.anomaly.anomaly_score).toFixed(3)}</p>
               </div>
               <div>
                 <span className="text-gray-500">Confidence</span>
-                <p className="font-bold text-gray-900">{prediction.anomaly.confidence.toFixed(1)}%</p>
+                <p className="font-bold text-gray-900">{safeNum(prediction.anomaly.confidence).toFixed(1)}%</p>
               </div>
             </div>
             {prediction.anomaly.contributing_factors.length > 0 && (
