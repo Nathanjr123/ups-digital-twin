@@ -13,11 +13,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from app.core.config import get_settings
-from app.api.routes import ups, predictions, alerts
+from app.api.routes import ups, predictions, alerts, simulation
 from app.services.ups_service import UPSService
 from app.services.prediction_service import PredictionService
 from app.services.alert_service import AlertService
 from app.services.websocket_service import WebSocketManager
+from app.services.simulation_service import SimulationService
 from app.ml.model_trainer import train_models_on_startup
 
 # Configure logging
@@ -47,8 +48,9 @@ async def lifespan(app: FastAPI):
     
     # Initialize services
     global ups_service, prediction_service, alert_service, websocket_manager
-    
+
     ups_service = UPSService()
+
     prediction_service = PredictionService(
         anomaly_detector=models["anomaly_detector"],
         failure_predictor=models["failure_predictor"]
@@ -64,9 +66,13 @@ async def lifespan(app: FastAPI):
         update_interval=settings.telemetry_update_interval
     )
     
+    # Initialize simulation service
+    simulation_service = SimulationService(ups_service, prediction_service)
+
     # Initialize route dependencies
     predictions.init_prediction_routes(prediction_service, ups_service)
     alerts.init_alert_routes(alert_service)
+    simulation.init_simulation_routes(simulation_service)
     
     logger.info("API started successfully!")
     
@@ -98,6 +104,7 @@ app.add_middleware(
 app.include_router(ups.router, prefix=settings.api_prefix)
 app.include_router(predictions.router, prefix=settings.api_prefix)
 app.include_router(alerts.router, prefix=settings.api_prefix)
+app.include_router(simulation.router, prefix=settings.api_prefix)
 
 
 # WebSocket endpoints

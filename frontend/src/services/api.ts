@@ -7,6 +7,7 @@ import axios from 'axios';
 import type { UPSInfo, FleetSummary, UPSTelemetry, TelemetryHistory } from '@/types/ups';
 import type { CombinedPrediction, ModelPerformance } from '@/types/prediction';
 import type { Alert, AlertList, AlertStats } from '@/types/alert';
+import type { StrategySettings, StrategyImpact, SimulationRequest, SimulationResult } from '@/types/simulation';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
@@ -59,6 +60,20 @@ export const alertService = {
   
   updateAlert: (alertId: string, update: { status?: string; acknowledged_by?: string; resolved_by?: string }) =>
     api.patch<Alert>(`/api/alerts/${alertId}`, update),
+};
+
+// Simulation Endpoints
+export const simulationService = {
+  getStrategy: () => api.get<StrategySettings>('/api/simulation/strategy'),
+
+  setStrategy: (settings: StrategySettings) =>
+    api.post<StrategyImpact>('/api/simulation/strategy', settings),
+
+  previewStrategy: (settings: StrategySettings) =>
+    api.post<StrategyImpact>('/api/simulation/strategy/preview', settings),
+
+  runSimulation: (request: SimulationRequest) =>
+    api.post<SimulationResult>('/api/simulation/run', request),
 };
 
 export default api;

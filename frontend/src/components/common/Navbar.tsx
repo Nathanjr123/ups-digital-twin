@@ -4,7 +4,7 @@
  */
 
 import { Link, useLocation } from 'react-router-dom';
-import { Activity, AlertCircle, BarChart3, Layout } from 'lucide-react';
+import { Activity, AlertCircle, BarChart3, Layout, FlaskConical } from 'lucide-react';
 import { cn } from '@/utils/formatters';
 import { APP_NAME } from '@/utils/constants';
 
@@ -13,6 +13,7 @@ const navigation = [
   { name: 'Fleet', href: '/fleet', icon: Activity },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
   { name: 'Alerts', href: '/alerts', icon: AlertCircle },
+  { name: 'Simulation', href: '/simulation', icon: FlaskConical },
 ];
 
 export function Navbar() {

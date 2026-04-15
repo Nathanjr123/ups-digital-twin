@@ -10,6 +10,7 @@ import { Fleet } from './pages/Fleet';
 import { UPSDetail } from './pages/UPSDetail';
 import { Analytics } from './pages/Analytics';
 import { Alerts } from './pages/Alerts';
+import { Simulation } from './pages/Simulation';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/ups/:id" element={<UPSDetail />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/alerts" element={<Alerts />} />
+          <Route path="/simulation" element={<Simulation />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
